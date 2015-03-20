@@ -6,23 +6,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- Le styles -->
-        <link href="<?php echo base_url();?>/assets/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css">
-<link href="<?php echo base_url();?>/assets/css/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css">
-<link href="<?php echo base_url();?>/assets/css/style.css" media="screen" rel="stylesheet" type="text/css">
-<link href="<?php echo base_url();?>/assets/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
-<link href="<?php echo base_url();?>/assets/css/bootstrap-datetimepicker.min.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="<?php echo base_url();?>assets/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url();?>assets/css/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url();?>assets/css/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url();?>assets/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url();?>assets/css/bootstrap-datetimepicker.min.css" media="screen" rel="stylesheet" type="text/css">
 
         <!-- Scripts -->
         <script type="text/javascript">
 			var base_url = "<?php echo site_url();?>";
         </script>
         <!--[if lt IE 9]><script type="text/javascript" src="<?php echo base_url();?>/assets/js/html5shiv.js"></script><![endif]-->
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/jquery.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/jquery-ui.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>/assets/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
     $(function() {
         $('.datepicker').datepicker({
