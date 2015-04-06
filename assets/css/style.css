@@ -1280,4 +1280,6 @@ a:hover.logo{color: #FFFFFF; text-decoration:none;}
     vertical-align: middle;
     margin-bottom:0px !important;
     }
-.supply-head .controls{display: inline-block;width:167px;font-weight:bold;margin-bottom: 15px;}     
+.supply-head .controls{display: inline-block;width:167px;font-weight:bold;margin-bottom: 15px;} 
+
+.error_outline{border:1.5px solid red;}    

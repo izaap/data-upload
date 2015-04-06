@@ -281,12 +281,23 @@ class address extends CI_controller
     {
         $supply_details = array();
 
-        $source_power = (array)$this->input->post('source_power1');
-        $amount_power = (array)$this->input->post('amount_power1');
-        $plant        = (array)$this->input->post('plant_sel');
+        $source_power = array();
+        $amount_power = array();
+        $plant        = array();
 
+
+        if($this->input->post('source_power1'))
+            $source_power = $this->input->post('source_power1');
+
+        if($this->input->post('amount_power1'))
+            $amount_power = $this->input->post('amount_power1');
+
+        if($this->input->post('plant_sel'))
+            $plant = $this->input->post('plant_sel');
+
+        
         //print_r($_POST);die;
-        if(count($source_power) && count($amount_power) &&count($plant) )
+        if($source_power && $amount_power && $plant )
         {
 
             

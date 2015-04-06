@@ -57,8 +57,8 @@
                             <th>Company Name</th> <!--Email-->
                             <th>Type of Participant</th>
                             <th>Plant Name(s)</th> <!--for previously phone-->
-                            <th>Submit Date</th>
-                            <th>Modify</th>
+                            <th>Submit Date and Time</th>
+                            <th>View/Download</th>
                             <th>Select All&nbsp;<input type="checkbox" id="selecctall"/></th>
                         </tr>
                     </thead>

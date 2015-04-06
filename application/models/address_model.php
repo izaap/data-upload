@@ -37,7 +37,7 @@ Class Address_Model extends CI_Model
          
         $this->load->library('Datatables');
         $this->datatables->from('address');
-        $this->datatables->select("address.id,address.organization,roles.name as role_name,address.mailing_address as mailing_address,address.city as city,address.location as location,address.deliverypoint as deliverypoint,if(address.type_of_participant=3,'add_wholsale','add_bulk_user') as type", FALSE);
+        $this->datatables->select("address.id,address.organization,roles.name as role_name,address.mailing_address as mailing_address,address.city as city,address.location as location,address.deliverypoint as deliverypoint,if(address.type_of_participant=3,'add_wholesale','add_bulk_user') as type", FALSE);
         
         $this->datatables->join("roles","roles.id=address.type_of_participant",'left');
 

@@ -78,7 +78,9 @@ class Upload_form extends CI_controller
             $form = $_POST;
 
             if( isset($form['date']) )
-                $date = $form['date'];
+            {
+                $date = getCustomDate($form['date'], 'd-m-Y');
+            }
 
             
             //get address data
@@ -104,7 +106,7 @@ class Upload_form extends CI_controller
             $comments_data['user_id'] = $user_id; 
             $comments_data['date']    = str2DBDate($date);
             
-
+//die($comments_data['date']);
             switch ($this->current_user_role) 
             {
                 case 2:
@@ -218,10 +220,14 @@ class Upload_form extends CI_controller
                         $l = $k+1;
                        $plants[$plant['id']] = $plant;
 
-                       $this->form_validation->set_rules("dp{$l}_mw{$plant['id']}[]", 'dp_mw', '');
-                       $this->form_validation->set_rules("dp{$l}_mv{$plant['id']}[]", 'dp_mv', '');
+                       for($j =0; $j<24; $j++)
+                       {
+                            $this->form_validation->set_rules("dp{$l}_mw{$plant['id']}[$j]", 'dp_mw', 'trim|required|numeric');
+                            $this->form_validation->set_rules("dp{$l}_mv{$plant['id']}[$j]", 'dp_mv', 'trim|required|numeric');
+                       }
+                       
                     }
-
+//die;
                     $this->data['unit_count']   = count($plants);
                     $this->data['dp_data']      = $this->wholesale_dispath_model->get_unit_wise_data($date, $this->current_user_id);
 
@@ -233,7 +239,7 @@ class Upload_form extends CI_controller
                     if($this->form_validation->run())
                     {
                         $insert_data = array(); 
-                        $insert_data['date']            = str2DBDate($this->input->post('date'));
+                        $insert_data['date']            = str2DBDate($date);
                         $insert_data['user_id']         = $this->current_user_id;
                         $insert_data['created_id']      = $this->current_user_id;
                         

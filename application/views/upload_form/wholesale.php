@@ -2,7 +2,7 @@
     var current_user_id = <?php echo $current_user_id;?>;
     $(function() {
         $('#web_form_date,#web_icon_date').datepicker({
-            format: 'mm/dd/yyyy',
+            format: 'dd/mm/yyyy',
             startDate: '-0d'
         }).on('changeDate', function (ev) {
           var temp = new Date(ev.date);
@@ -21,8 +21,8 @@
   <div class="span7">
     <h1>DAILY AVAILABILITY DECLARATION FOR DISPATCH DAY</h1>
   </div>
-  <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('m-d-Y', $date);?>" class="span4 input-append date m_top_15" >
-    <input type="text" readonly="" name="date" id="web_form_date" value="<?php echo date('m-d-Y',$date);?>" size="16" style="width:110px;">
+  <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y', $date);?>" class="span4 input-append date m_top_15" >
+    <input type="text" readonly="" name="date" id="web_form_date" value="<?php echo date('d-m-Y',$date);?>" size="16" style="width:110px;">
     <span class="add-on" id="web_icon_date"><i class="icon-calendar"></i></span>
   </div>
 </div>
@@ -76,7 +76,7 @@
     <td>Special Unique ID</td>
     <td><input type="text" readonly value="<?=$user_details['id']?>" ></td>
     <td>Date of Submission:</td>
-    <td><input type="text" readonly value="<?=(!empty($date))?date('m/d/Y',$date):''?>" ></td>
+    <td><input type="text" readonly value="<?php echo date('d/m/Y');?>" ></td>
   </tr>
 </table>
   <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="delivery-area">
@@ -114,7 +114,9 @@ for($i =1; $i<=24; $i++)
   <?php for($j =1; $j<=24; $j++){
         echo "<td style='padding:8px 1px 8px 1px !important;'>";
         $temp = (isset($dp_data[$v]['MW']['field_'.$j]))?$dp_data[$v]['MW']['field_'.$j]:"";
-        echo "<input name='dp{$l}_mw{$v}[]' id='dp{$l}_mw{$v}' value='".((set_value("dp{$l}_mw{$v}[]", $temp))?set_value("dp{$l}_mw{$v}[]", $temp):0)."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' maxlength='5'/>";
+        $o = $j-1;
+        $cls = form_error('dp{$l}_mw{$v}[$o]')?"class='error_outline'":'';
+        echo $cls."<input name='dp{$l}_mw{$v}[$o]' id='dp{$l}_mw{$v}' value='".((set_value("dp{$l}_mw{$v}[$o]", $temp))?set_value("dp{$l}_mw{$v}[$o]", $temp):'')."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;'  $cls maxlength='5'/>";
         echo "</td>";
     } $i =$i+1; ?>
   </tr>
@@ -123,7 +125,9 @@ for($i =1; $i<=24; $i++)
   <?php for($j =1; $j<=24; $j++){
         echo "<td style='padding:8px 1px 8px 1px !important;'>";
         $temp = (isset($dp_data[$v]['MVAR']['field_'.$j]))?$dp_data[$v]['MVAR']['field_'.$j]:"";
-        echo "<input name='dp{$l}_mv{$v}[]' id='dp{$l}_mv{$v}' value='".((set_value("dp{$l}_mv{$v}[]", $temp))?set_value("dp{$l}_mv{$v}[]", $temp):0)."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' maxlength='5' />";
+        $o = $j-1;
+        $cls = form_error('dp{$l}_mw{$v}[$o]')?"class='error_outline'":'';
+        echo "<input name='dp{$l}_mv{$v}[$o]' id='dp{$l}_mv{$v}' value='".((set_value("dp{$l}_mv{$v}[$o]", $temp))?set_value("dp{$l}_mv{$v}[$o]", $temp):'')."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' $cls maxlength='5' />";
         echo "</td>";
     } ?>
   </tr>
@@ -136,7 +140,7 @@ for($i =1; $i<=24; $i++)
     <td width="3%"></td>
     <td width="39%">Recipient of Power Supply</td>
     <td>&nbsp;</td>
-    <td width="38%">Amount of Power (MW) </td>
+    <td width="38%">Contracted Power (MW) </td>
   </tr>
 
   <?php 

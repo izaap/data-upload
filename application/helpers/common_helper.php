@@ -101,7 +101,35 @@
         
         return $user_id;
  }
-    
+   
+ function getCustomDate($str = null, $format = 'Y-m-d')
+ {
+    $intTime = getTimeStamp($str);
+
+    if ($intTime === FALSE)
+      return NULL;
+        
+    return date($format, $intTime);
+
+ }
+
+ function getTimeStamp($str = '', $format = 'dmy')
+ {
+    if($str === '')
+       return time();
+
+    if($format === 'dmy' OR $format === 'ymd' )
+    {
+      $str = preg_replace(array('/\//'), array('-'), $str);
+    }
+    else if($format === 'mdy')
+    {
+      $str = preg_replace(array('/-/'), array('/'), $str);
+    }
+
+    return strtotime($str);
+ }
+
  function str2USDT($str)
     {
         $intTime = strtotime($str);
@@ -130,6 +158,7 @@ function str2DBDT($str)
 function str2DBDate($str)
 {
     $intTime = strtotime($str);
+    
     if ($intTime === false)
         return NULL;
     return date("Y-m-d",$intTime);
