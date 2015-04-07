@@ -65,10 +65,10 @@
 
 <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="delivery-area">
   <tr>
-    <td width="18%">Connection Point:</td>
+    <td width="18%">Plant Name:</td>
     <td width="3%"></td>
     <td width="39%">
-      <div class="point-box" style=" padding: 15px 0 0 25px;"><?php echo (isset($address['deliverypoint']))?$address['deliverypoint']:""; ?></div>
+      <div class="point-box" style=" padding: 15px 0 0 25px;"><?php echo (!empty($user_details['plant']))?get_plant_name($user_details['plant']):""; ?></div>
     </td>
   </tr>
 </table>
@@ -118,7 +118,7 @@ for($i =1; $i<=24; $i++)
     <td width="3%"></td>
     <td width="39%">Recipient of Power Supply</td>
     <td>&nbsp;</td>
-    <td width="38%">Amount of Power (MW) </td>
+    <td width="38%">Contracted Power (MW) </td>
   </tr>
 
   <?php 

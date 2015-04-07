@@ -2,7 +2,7 @@
     var current_user_id = <?php echo $current_user_id;?>;
     $(function() {
         $('#web_form_date,#web_icon_date').datepicker({
-            format: 'mm/dd/yyyy',
+            format: 'dd/mm/yyyy',
             startDate: '-0d'
         }).on('changeDate', function (ev) {
           var temp = new Date(ev.date);
@@ -10,7 +10,6 @@
         });
     });
 </script>
-
 <div class="container gridco">
 
 <form method="POST">
@@ -23,8 +22,8 @@
   <div class="span7">
     <h1>DAILY DEMAND SHEET FOR DISPATCH DAY</h1>
   </div>
-  <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('m-d-Y',$date);?>" class="span4 input-append date m_top_15" >
-    <input type="text" readonly="" name="date" id="web_form_date" value="<?php echo date('m-d-Y', $date);?>" size="16" style="width:110px;">
+  <div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y',$date);?>" class="span4 input-append date m_top_15" >
+    <input type="text" readonly="" name="date" id="web_form_date" value="<?php echo date('d-m-Y', $date);?>" size="16" style="width:110px;">
     <span class="add-on" id="web_icon_date"><i class="icon-calendar"></i></span>
   </div>
 </div>
@@ -83,7 +82,7 @@
     <td> Unique ID</td>
     <td><input type="text" readonly value="<?=$user_details['id']?>"></td>
     <td>Date of Submission:</td>
-    <td><input type="text" readonly value="<?=(!empty($date))?date('m/d/Y',$date):''?>"></td>
+    <td><input type="text" readonly value="<?=date('m/d/Y')?>"></td>
   </tr>
 </table>
 
@@ -91,7 +90,7 @@
 <h2>Demand Details</h2>
 <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="delivery-area">
   <tr>
-    <td width="18%">Delivery Point:</td>
+    <td width="18%">Withdrawal Point:</td>
     <td width="3%"></td>
     <td width="39%">
       <input type="text" readonly value="<?php echo (isset($address['deliverypoint']))?$address['deliverypoint']:""; ?>">
@@ -102,9 +101,11 @@
     <td width="3%"></td>
     <td width="39%">Source (s) of Power Supply</td>
     <td>&nbsp;</td>
-    <td width="38%">Amount of Power (MW) </td>
+    <td width="38%">Contracted Power (MW) </td>
   </tr>
-  <?php foreach ($demand_details as $k=>$row) : ?>
+  <?php 
+  $total_contract_power = 0;
+  foreach ($demand_details as $k=>$row) : ?>
   <tr>
     <td width="18%"></td>
     <td width="2%" class="count"><?php echo integerToRoman($k+1);?></td>
@@ -112,11 +113,12 @@
     <td>&nbsp;</td>
     <td class="bottom-line"><input type="text" readonly value="<?=(isset($row['power']))?trim($row['power'],'_'):""?>"></td>
   </tr>
-  <?php endforeach;?>
+  <?php
+      $total_contract_power += (isset($row['power']))?trim($row['power'],'_'):0;
+   endforeach;?>
   
 </table>
-
-
+ 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered">
   <tr>
     <td style='padding:8px 1px 8px 1px !important;'>Dispatch Period</td>
@@ -129,7 +131,8 @@
     <?php for($i =1; $i<=24; $i++){
         echo "<td style='padding:8px 1px 8px 1px !important;'>";
         $temp = (isset($dp_data['field_'.$i]))?$dp_data['field_'.$i]:"";
-        echo "<input name='dp[]' id='dp_$i' value='".((set_value('dp[]', $temp))?set_value('dp[]', $temp):0)."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' />";
+        $cls = form_error("dp[$i]")?"class='error_outline'":'';
+        echo "<input name='dp[$i]' id='dp_$i' value='".set_value("dp[$i]", $temp)."' onkeypress='return numbersonly(event)' $cls style='width:40px;height:25px;' />";
         echo "</td>";
     } ?>
   </tr>
@@ -137,7 +140,7 @@
 
 <h3>Comments:</h3><textarea name="comments" id="comments" col="100" rows="4" style="width:400px;"><?php echo $comments;?></textarea>
 
-<input type="submit" value="Submit" role="button"class="btn btn-success btn-large" />
+<input type="submit" value="Submit" role="button" onclick="return demand_check('<?=$total_contract_power?>');" class="btn btn-success btn-large" />
 <a class="btn btn-danger btn-large" style="margin-right:20px;" href="<?php echo site_url('upload/list_view'); ?>" ><i class="icon-backward"></i> Cancel</a>
 
 </form>
@@ -157,6 +160,30 @@ function numbersonly(e) {
       return false //disable key press
     }
   }
+}
+
+function demand_check(total_contract) {
+
+   var j=0;
+   for (i = 1; i <=24; i++) { 
+
+      var demand_val = ($("#dp_"+i).val() !='')?$("#dp_"+i).val():0;
+
+      if(parseInt(demand_val) > parseInt(total_contract)){
+         j=1; 
+         $("#dp_"+i).addClass('error_outline');
+      }
+
+   }
+
+   if(j==1){
+      alert("The Demand(mw) is not greater than for total contracted power");
+      return false;
+   }
+   else
+   {
+      return true;
+   } 
 }
 
 </script>

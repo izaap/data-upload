@@ -8,7 +8,7 @@ class user extends CI_controller
     private $_change_password_validation_rules = array(
         array('field' => 'old_password',  'label' => 'Old Password', 'rules' => 'trim|required|xss_clean|min_length[4]|callback_password_check|max_length[20]'),
         array('field' => 'password',  'label' => 'New Password', 'rules' => 'trim|required|xss_clean|min_length[4]|max_length[20]'),
-        array('field' => 'conf_password',  'label' => 'Confirm Password', 'rules' => 'trim|required|xss_clean|matches[password]')
+        array('field' => 'conf_password',  'label' => 'Confirm Password', 'rules' => 'trim|required|xss_clean|matches[password]|callback_old_password_check')
     );
 
     private $_gate_openings_validation_rules= array(
@@ -280,6 +280,21 @@ class user extends CI_controller
         else
         {
             $this->form_validation->set_message('password_check', 'Old Password does not matched.');
+            return FALSE;
+        }    
+    }
+
+    function old_password_check($pwd){
+
+        $old_pwd = $this->input->post('old_password');
+        
+        if($pwd != $old_pwd)
+        {
+            return TRUE;
+        }
+        else
+        {
+            $this->form_validation->set_message('old_password_check', 'New password should not be the same as Old password.');
             return FALSE;
         }    
     }

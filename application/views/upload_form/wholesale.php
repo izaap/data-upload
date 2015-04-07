@@ -81,10 +81,10 @@
 </table>
   <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="delivery-area">
     <tr>
-      <td width="15%">Connection Point:</td>
+      <td width="15%">Plant Name:</td>
       <td width="3%"></td>
       <td width="39%">
-        <input type="text" readonly value="<?php echo (isset($address['deliverypoint']))?$address['deliverypoint']:""; ?>">
+        <input type="text" readonly value="<?php echo (!empty($user_details['plant']))?get_plant_name($user_details['plant']):""; ?>">
       </td>
     </tr>
   </table>
@@ -115,8 +115,8 @@ for($i =1; $i<=24; $i++)
         echo "<td style='padding:8px 1px 8px 1px !important;'>";
         $temp = (isset($dp_data[$v]['MW']['field_'.$j]))?$dp_data[$v]['MW']['field_'.$j]:"";
         $o = $j-1;
-        $cls = form_error('dp{$l}_mw{$v}[$o]')?"class='error_outline'":'';
-        echo $cls."<input name='dp{$l}_mw{$v}[$o]' id='dp{$l}_mw{$v}' value='".((set_value("dp{$l}_mw{$v}[$o]", $temp))?set_value("dp{$l}_mw{$v}[$o]", $temp):'')."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;'  $cls maxlength='5'/>";
+        $cls = form_error("dp{$l}_mw{$v}[$o]")?"class='error_outline'":'';
+        echo "<input name='dp{$l}_mw{$v}[$o]' id='dp{$l}_mw{$v}' value='".set_value("dp{$l}_mw{$v}[$o]", $temp)."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;'  $cls maxlength='5'/>";
         echo "</td>";
     } $i =$i+1; ?>
   </tr>
@@ -126,8 +126,8 @@ for($i =1; $i<=24; $i++)
         echo "<td style='padding:8px 1px 8px 1px !important;'>";
         $temp = (isset($dp_data[$v]['MVAR']['field_'.$j]))?$dp_data[$v]['MVAR']['field_'.$j]:"";
         $o = $j-1;
-        $cls = form_error('dp{$l}_mw{$v}[$o]')?"class='error_outline'":'';
-        echo "<input name='dp{$l}_mv{$v}[$o]' id='dp{$l}_mv{$v}' value='".((set_value("dp{$l}_mv{$v}[$o]", $temp))?set_value("dp{$l}_mv{$v}[$o]", $temp):'')."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' $cls maxlength='5' />";
+        $cls1 = form_error("dp{$l}_mv{$v}[$o]")?"class='error_outline'":'';
+        echo "<input name='dp{$l}_mv{$v}[$o]' id='dp{$l}_mv{$v}' value='".set_value("dp{$l}_mv{$v}[$o]", $temp)."' onkeypress='return numbersonly(event)' style='width:40px;height:25px;' $cls1 maxlength='5' />";
         echo "</td>";
     } ?>
   </tr>

@@ -68,7 +68,7 @@ Class Address_Model extends CI_Model
 
         $where = array("users.id" => $userId);
         
-        $this->db->select("address.id as id,users.id as user_id,roles.id as role_id,address.organization as organization,address.mailing_address as mailing_address,address.main_address as main_address,address.location as location,address.city as city,deliverypoint");
+        $this->db->select("address.id as id,users.id as user_id,roles.id as role_id,address.organization as organization,address.mailing_address as mailing_address,address.main_address as main_address,address.location as location,address.city,address.telephone,address.deliverypoint");
         $this->db->from($this->_table);
         $this->db->join("users","users.address_id=address.id");
         $this->db->join("roles","roles.id=users.role");
@@ -80,7 +80,7 @@ Class Address_Model extends CI_Model
     function get_user_address($where)
     {
         
-        $this->db->select("address.id as id,address.organization as organization,address.type_of_participant,address.mailing_address as mailing_address,address.main_address as main_address,address.location as location,address.city as city,telephone,deliverypoint");
+        $this->db->select("address.id as id,address.organization as organization,address.type_of_participant,address.mailing_address as mailing_address,address.main_address as main_address,address.location as location,address.city as city,telephone,address.telephone,address.deliverypoint");
     	$this->db->from($this->_table);
        // $this->db->join("roles","roles.id=users.role");
     	$this->db->where($where);

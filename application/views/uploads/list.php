@@ -59,7 +59,7 @@
                             <th>Plant Name(s)</th> <!--for previously phone-->
                             <th>Submit Date and Time</th>
                             <th>View/Download</th>
-                            <th>Select All&nbsp;<input type="checkbox" id="selecctall"/></th>
+                            <th >Select All&nbsp;<input type="checkbox" id="selecctall"/></th>
                         </tr>
                     </thead>
                     <tbody>

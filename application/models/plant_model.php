@@ -104,6 +104,7 @@ Class Plant_model extends CI_Model
         $this->db->join("supply_details s","p.id=s.plant_id");
         $this->db->where('s.address_id',$address_id);
         $this->db->group_by('s.plant_id');
+        $this->db->order_by('p.no_units','ASC');
         $result = $this->db->get()->result_array();
 
         return $result;

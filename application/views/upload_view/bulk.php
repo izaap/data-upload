@@ -72,7 +72,7 @@
 <h2>Demand Details</h2>
 <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="delivery-area">
   <tr>
-    <td width="18%">Delivery Point:</td>
+    <td width="18%">Withdrawal Point:</td>
     <td width="3%"></td>
     <td width="39%">
     <div class="point-box" style=" padding: 15px 0 0 25px;"><?php echo (isset($address['deliverypoint']))?$address['deliverypoint']:""; ?></div>
@@ -83,7 +83,7 @@
     <td width="3%"></td>
     <td width="39%">Source (s) of Power Supply </td>
     <td>&nbsp;</td>
-    <td width="38%">Amount of Power (MW) </td>
+    <td width="38%">Contracted Power (MW) </td>
   </tr>
   <?php foreach ($demand_details as $k=>$row) : ?>
   <tr>

@@ -390,3 +390,20 @@ function send_mail($user_id=0, $date=NULL)
     $CI->email->send();
    
 }
+
+function get_plant_name($id=0)
+{
+   $CI = get_instance();
+    
+   $CI->load->model('plant_model');
+   $res = $CI->plant_model->get_where(array('id' => $id));
+
+    if($res->num_rows > 0){
+        $row = $res->row_array();
+
+        return $row['plant_name'];
+    }
+
+    return FALSE;
+
+}

@@ -7,6 +7,13 @@ Class Uploads_view_model extends CI_Model
         parent::__construct();
     }
     
+    function get_where($where)
+    {
+        $this->db->from("uploads_view");
+        $this->db->where($where);
+        $res = $this->db->get();
+        return $res->row_array();
+    }
     
     function getUploadsRecords()
     {

@@ -75,28 +75,13 @@
                 <td><?php echo $uvalue['designation']; ?></td>
             </tr>
             <?php if($uvalue['role']==3){ ?>
-
             <tr>
                 <td> <h5>Assigned Plant</h5></td>
                 <td>
                 <?php 
-                    $assignd_name="";
-                    if(!empty($uvalue['plant_ids'])){
-
-                        $keyval = array_search($uvalue['plant'], explode(",",$uvalue['plant_ids'])); // $key = 2;
-                        
-                        $search_nam = explode(",",$uvalue['plant_names']);
-                        $assignd_name = $search_nam[$keyval];
-                    }
-
-                    echo $assignd_name; 
+                   echo (!empty($uvalue['plant']))? get_plant_name($uvalue['plant']):'';
 
                 ?></td>
-            </tr>
-
-            <tr>
-                <td> <h5>Plant details(company)</h5></td>
-                <td><?php echo $uvalue['plant_names']; ?></td>
             </tr>
             <?php } ?>
             

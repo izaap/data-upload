@@ -98,7 +98,9 @@ class Upload_form extends CI_controller
             $address_id = isset($this->data['address']['id'])?$this->data['address']['id']:0;
 
             $this->data['comments'] = '';
-            $result = $this->db->get_where('comments', array('user_id' => $this->current_user_id, 'date' => str2DBDate($date)))->row_array();
+            $comment_date = is_null($date)?date('Y-m-d'):$date;
+            $result = $this->db->get_where('comments', array('user_id' => $this->current_user_id, 'date' => str2DBDate($comment_date)))->row_array();
+            
             if(isset($result['description']))
                 $this->data['comments'] = $result['description'];
 
@@ -126,7 +128,10 @@ class Upload_form extends CI_controller
 
                     $this->data['dp_data'] = $this->bulk_dispath_model->get_data( $this->current_user_id, str2DBDate($date) );
 
-                    $this->form_validation->set_rules('dp[]', 'dp', '');
+                    for($i =1; $i<=24; $i++){
+                    	$this->form_validation->set_rules("dp[$i]", "dp[$i]", 'trim|required|numeric');
+                    }
+                    	
                     if($this->form_validation->run())
                     {
                         $insert_data = array(); 
@@ -138,7 +143,7 @@ class Upload_form extends CI_controller
                         $dp = $this->input->post('dp');
                         foreach ($dp as $k=>$v) 
                         {
-                            $insert_data['field_'.($k+1)]   = $v;
+                            $insert_data['field_'.($k)]   = $v;
                         }
 
                         
@@ -154,8 +159,8 @@ class Upload_form extends CI_controller
                         {
                             case 'insert':
                                 $insert_data['date']            = str2DBDate($date);
-                                $insert_data['created_time']    = str2DBDate(date("Y-m-d H:i:s")); 
-                                $insert_data['updated_time']  = str2DBDate(date("Y-m-d H:i:s"));
+                                $insert_data['created_time']    = str2DBDT(date("Y-m-d H:i:s")); 
+                                $insert_data['updated_time']  = str2DBDT(date("Y-m-d H:i:s"));
                                 
                                 $this->db->insert('bulk_dispath_period_data', $insert_data);
 
@@ -174,7 +179,7 @@ class Upload_form extends CI_controller
                                 
                                 $this->db->where('user_id',$user_id);
                                 $this->db->where('date',str2DBDate($date));
-                                $insert_data['updated_time']  = str2DBDate(date("Y-m-d H:i:s"));                                  
+                                $insert_data['updated_time']  = str2DBDT(date("Y-m-d H:i:s"));                                  
                                 $this->db->update('bulk_dispath_period_data', $insert_data);
 
                                 $this->db->where($comments_data);
@@ -222,8 +227,8 @@ class Upload_form extends CI_controller
 
                        for($j =0; $j<24; $j++)
                        {
-                            $this->form_validation->set_rules("dp{$l}_mw{$plant['id']}[$j]", 'dp_mw', 'trim|required|numeric');
-                            $this->form_validation->set_rules("dp{$l}_mv{$plant['id']}[$j]", 'dp_mv', 'trim|required|numeric');
+                            $this->form_validation->set_rules("dp{$l}_mw{$plant['id']}[$j]", "dp{$l}_mw{$plant['id']}[$j]", 'trim|required|numeric');
+                            $this->form_validation->set_rules("dp{$l}_mv{$plant['id']}[$j]", "dp{$l}_mv{$plant['id']}[$j]", 'trim|required|numeric');
                        }
                        
                     }
@@ -386,7 +391,9 @@ class Upload_form extends CI_controller
             
             $this->data['current_user_id'] = $this->current_user_id;
 
-            $this->data['submit_date'] = $uploaddatee;
+            $submit_date = $this->uploads_view_model->get_where(array('user_id'=>$this->current_user_id,'date'=>str2DBDate($date)));
+
+            $this->data['submit_date'] = (isset($submit_date['submission_date']))?$submit_date['submission_date']:date('m/d/Y');
             //get address data
             $this->data['address']      = $this->address_model->get_address($this->current_user_id);
             $this->data['user_details'] = $this->user_model->get_by_id($this->current_user_id);
@@ -476,10 +483,12 @@ class Upload_form extends CI_controller
     function generate_excel($path='',$save='',$user_id='',$date='',$objinc=1)
     {
         $this->load->library('excel', array(), 'excel'.$objinc);
-
-
+        
         $data = $this->data;
-        //echo '<pre>';print_r($this->data);
+
+        $submission_date = $this->uploads_view_model->get_where(array('user_id'=>$data['current_user_id'],'date'=>$date));
+
+        $data['submit_date'] = (isset($submission_date['submission_date']))?$submission_date['submission_date']:date('Y-m-d');
 
         $excel = 'excel'.$objinc;
 
@@ -528,16 +537,16 @@ class Upload_form extends CI_controller
         $this->excel->getActiveSheet()->getRowDimension('2')->setRowHeight(33.75);
 
         //third row
-        $title = 'DAILY AVAILABILITY DECLARATION FOR DISPATCH DAY';
+        $title = 'DAILY AVAILABILITY DECLARATION FOR DISPATCH DAY '.str2USDate($date);
         if($this->current_user_role == 2)
-            $title = 'DAILY DEMAND SHEET FOR DISPATCH DAY';
+            $title = 'DAILY DEMAND SHEET FOR DISPATCH DAY '.str2USDate($date);
 
         $this->excel->getActiveSheet()->getRowDimension('3')->setRowHeight(24);
-        $this->excel->getActiveSheet()->mergeCells('B3:P3');
+        $this->excel->getActiveSheet()->mergeCells('B3:H3');
         $this->excel->getActiveSheet()->setCellValue('B3', $title);
-        $this->excel->getActiveSheet()->setCellValue('Q3', 'DATE');
-        $this->excel->getActiveSheet()->setCellValue('R3', date('m-d-Y', $date));
-        $this->excel->getActiveSheet()->mergeCells('R3:U3');
+        $this->excel->getActiveSheet()->setCellValue('I3', 'DATE');
+        $this->excel->getActiveSheet()->setCellValue('J3', date('m/d/Y', $date));
+        $this->excel->getActiveSheet()->mergeCells('J3:U3');
 
         $this->excel->getActiveSheet()->getStyle('B3:U3')->getBorders()->getTop()->
             setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -552,10 +561,10 @@ class Upload_form extends CI_controller
 
         //4th row
         $this->excel->getActiveSheet()->getRowDimension('4')->setRowHeight(19.5);
-        $this->excel->getActiveSheet()->mergeCells('R4:U4');
-        $this->excel->getActiveSheet()->setCellValue('R4', 'DD/MM/YYYY');
-        $this->excel->getActiveSheet()->getStyle("R4")->getFont()->setSize();
-        $this->excel->getActiveSheet()->getStyle("R4")->getFont()->setItalic(true);
+        $this->excel->getActiveSheet()->mergeCells('J4:U4');
+        $this->excel->getActiveSheet()->setCellValue('J4', 'MM/DD/YYYY');
+        $this->excel->getActiveSheet()->getStyle("J4")->getFont()->setSize();
+        $this->excel->getActiveSheet()->getStyle("J4")->getFont()->setItalic(true);
 
         //5th row
         $this->excel->getActiveSheet()->getRowDimension('5')->setRowHeight(16.5);
@@ -608,7 +617,7 @@ class Upload_form extends CI_controller
         //9th row
         $this->excel->getActiveSheet()->getRowDimension('9')->setRowHeight(24);
         $this->excel->getActiveSheet()->setCellValue('B9', 'City:');
-        $this->excel->getActiveSheet()->setCellValue('C8', ((isset($address['city'])) ?
+        $this->excel->getActiveSheet()->setCellValue('C9', ((isset($address['city'])) ?
             $address['city'] : ""));
         $this->excel->getActiveSheet()->getStyle('B9:U9')->getBorders()->getTop()->
             setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
@@ -624,7 +633,8 @@ class Upload_form extends CI_controller
         $this->excel->getActiveSheet()->mergeCells('N9:U9');
         $this->excel->getActiveSheet()->mergeCells('K9:M9');
         $this->excel->getActiveSheet()->setCellValue('K9', 'Telephone:');
-
+        $this->excel->getActiveSheet()->setCellValue('N9', ((isset($address['telephone'])) ?
+            $address['telephone'] : ""));
         //10th row
         $this->excel->getActiveSheet()->getRowDimension('10')->setRowHeight(22.5);
 
@@ -657,7 +667,7 @@ class Upload_form extends CI_controller
                 'field1' => 'id',
                 'label1' => 'Special unique ID',
                 'field2' => 'date',
-                'label2' => 'Date'));
+                'label2' => 'Submit Date'));
         for ($i = 12; $i <= 15; $i++) 
         {
 
@@ -688,21 +698,21 @@ class Upload_form extends CI_controller
                 $field2 = user_role_name($user_details['id']);
             } else{
                 if ($market_co_ord[$i]['field2'] == "date") {
-                    $field2 = (!empty($date)) ? date('d/m/Y',$date):"";
+                    $field2 = (!empty($submit_date)) ? str2USDate($submit_date):"";
                     $this->excel->getActiveSheet()->getStyle("L$i")->getNumberFormat()->
                         setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX14);
                 } else {
                     $field2 = $user_details[$market_co_ord[$i]['field2']];
                 }
-
-                $this->excel->getActiveSheet()->setCellValue("N$i", $field2);
+                
             }    
+            $this->excel->getActiveSheet()->setCellValue("N$i", $field2);
         }
 
         //16th row
         $this->excel->getActiveSheet()->getRowDimension($i)->setRowHeight(19.5);
         $this->excel->getActiveSheet()->mergeCells("N$i:Q$i");
-        $this->excel->getActiveSheet()->setCellValue("N$i", "DD/MM/YYYY");
+        $this->excel->getActiveSheet()->setCellValue("N$i", "MM/DD/YYYY");
         $this->excel->getActiveSheet()->getStyle("N$i")->getFont()->setSize();
         $this->excel->getActiveSheet()->getStyle("N$i")->getFont()->setItalic(true);
 
@@ -749,9 +759,8 @@ class Upload_form extends CI_controller
 
                 $i++;
                 $this->excel->getActiveSheet()->getRowDimension($i)->setRowHeight(24);
-                $this->excel->getActiveSheet()->setCellValue("B$i", "Connection Point:");
-                $this->excel->getActiveSheet()->setCellValue("C$i", ((isset($address['deliverypoint'])) ?
-            $address['deliverypoint'] : ""));
+                $this->excel->getActiveSheet()->setCellValue("B$i", "Plant Name:");
+                $this->excel->getActiveSheet()->setCellValue("C$i", (!empty($user_details['plant']))?get_plant_name($user_details['plant']):"");
                 $this->excel->getActiveSheet()->getStyle("C$i")->getBorders()->getAllBorders()->
                     setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
@@ -888,7 +897,7 @@ class Upload_form extends CI_controller
                     $this->excel->getActiveSheet()->setCellValue("C$i",
                         "Recipient of Power Supply ");
                     $this->excel->getActiveSheet()->mergeCells("C$i:H$i");
-                    $this->excel->getActiveSheet()->setCellValue("J$i", "Amount of Power (MW) ");
+                    $this->excel->getActiveSheet()->setCellValue("J$i", "Contracted Power (MW) ");
                     $this->excel->getActiveSheet()->mergeCells("J$i:R$i");
 
                     $sno=1;
@@ -929,7 +938,7 @@ class Upload_form extends CI_controller
 
                 $i++;
                 $this->excel->getActiveSheet()->getRowDimension($i)->setRowHeight(24);
-                $this->excel->getActiveSheet()->setCellValue("B$i", "Delivery Point:");
+                $this->excel->getActiveSheet()->setCellValue("B$i", "Withdrawal Point:");
                 $this->excel->getActiveSheet()->setCellValue("C$i", ((isset($address['deliverypoint'])) ?
             $address['deliverypoint'] : ""));
                 $this->excel->getActiveSheet()->getStyle("C$i")->getBorders()->getAllBorders()->
@@ -940,7 +949,7 @@ class Upload_form extends CI_controller
                 $this->excel->getActiveSheet()->setCellValue("C$i",
                     "Source (s) of Power Supply ");
                 $this->excel->getActiveSheet()->mergeCells("C$i:H$i");
-                $this->excel->getActiveSheet()->setCellValue("J$i", "Amount of Power (MW) ");
+                $this->excel->getActiveSheet()->setCellValue("J$i", "Contracted Power (MW) ");
                 $this->excel->getActiveSheet()->mergeCells("J$i:R$i");
 
                 $sno=1;
