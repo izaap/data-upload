@@ -107,7 +107,7 @@
 								<input name="source_power1[]" id="source_power1" value="<?php echo $demands['source'];?>"  required="required" style="width:150px" type="text">
 							</div>
 							<div class="controls" style="float:right;">
-								<input name="amount_power1[]" id="amount_power1" value="<?php echo $demands['power'];?>" required="required" style="width:150px" type="text">
+								<input name="amount_power1[]" id="amount_power1" value="<?php echo $demands['power'];?>" onkeypress='return numbersonly(event)' required="required" style="width:150px" type="text">
 							</div>
 						</div>
 
@@ -129,7 +129,7 @@
 						<input name="source_power1[]" id="source_power1" style="width:150px" type="text">
 					</div>
 					<div class="controls" style="float:right;">
-						<input name="amount_power1[]" id="amount_power1" style="width:150px" type="text">
+						<input name="amount_power1[]" id="amount_power1" onkeypress='return numbersonly(event)' style="width:150px" type="text">
 					</div>
 				</div>
 
@@ -258,7 +258,7 @@
 		$('#add_supply').click(function() {	
 
 			if(n<=20){
-				var htmlval2 = '<div class="control-group" id="TextBoxDiv1"><div class="controls" style="float:left;"><select name="plant_sel[]" id="plant_sel" class="span2">'+plants+'</select></div><div class="controls" style="float:left;margin-left: 50px;"><input name="source_power1[]" id="source_power1" style="width:150px" type="text"></div><div class="controls" style="float:right;"><input name="amount_power1[]" id="amount_power1" style="width:150px" type="text"></div></div>';					
+				var htmlval2 = '<div class="control-group" id="TextBoxDiv1"><div class="controls" style="float:left;"><select name="plant_sel[]" id="plant_sel" class="span2">'+plants+'</select></div><div class="controls" style="float:left;margin-left: 50px;"><input name="source_power1[]" id="source_power1" style="width:150px" type="text"></div><div class="controls" style="float:right;"><input name="amount_power1[]" id="amount_power1" onkeypress="return numbersonly(event)" style="width:150px" type="text"></div></div>';					
 			
 				$(htmlval2).fadeIn('slow').appendTo('#Supplygroup');				
 			n++;
@@ -276,5 +276,19 @@
 		});
 	
 	});	
+
+function numbersonly(e) {
+  var unicode=e.charCode? e.charCode : e.keyCode
+  //alert(unicode)
+  if (unicode!=8 && unicode != 46){ //if the key isn't the backspace key (which we should allow)
+  if (unicode<48||unicode>57) //if not a number
+    {
+      if(unicode==8 || unicode==46 || unicode == 37 || unicode == 39)//To  enable tab index in firefox and mac.(TAB, Backspace and DEL from the keyboard)
+      return true
+        else
+      return false //disable key press
+    }
+  }
+}
 
 </script>

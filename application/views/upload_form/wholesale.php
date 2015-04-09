@@ -2,7 +2,7 @@
     var current_user_id = <?php echo $current_user_id;?>;
     $(function() {
         $('#web_form_date,#web_icon_date').datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             startDate: '-0d'
         }).on('changeDate', function (ev) {
           var temp = new Date(ev.date);

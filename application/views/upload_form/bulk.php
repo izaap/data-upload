@@ -2,7 +2,7 @@
     var current_user_id = <?php echo $current_user_id;?>;
     $(function() {
         $('#web_form_date,#web_icon_date').datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             startDate: '-0d'
         }).on('changeDate', function (ev) {
           var temp = new Date(ev.date);
@@ -82,7 +82,7 @@
     <td> Unique ID</td>
     <td><input type="text" readonly value="<?=$user_details['id']?>"></td>
     <td>Date of Submission:</td>
-    <td><input type="text" readonly value="<?=date('m/d/Y')?>"></td>
+    <td><input type="text" readonly value="<?=date('d/m/Y')?>"></td>
   </tr>
 </table>
 

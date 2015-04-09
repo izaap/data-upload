@@ -545,7 +545,7 @@ class Upload_form extends CI_controller
         $this->excel->getActiveSheet()->mergeCells('B3:H3');
         $this->excel->getActiveSheet()->setCellValue('B3', $title);
         $this->excel->getActiveSheet()->setCellValue('I3', 'DATE');
-        $this->excel->getActiveSheet()->setCellValue('J3', date('m/d/Y', $date));
+        $this->excel->getActiveSheet()->setCellValue('J3', date('d/m/Y', $date));
         $this->excel->getActiveSheet()->mergeCells('J3:U3');
 
         $this->excel->getActiveSheet()->getStyle('B3:U3')->getBorders()->getTop()->
@@ -562,7 +562,7 @@ class Upload_form extends CI_controller
         //4th row
         $this->excel->getActiveSheet()->getRowDimension('4')->setRowHeight(19.5);
         $this->excel->getActiveSheet()->mergeCells('J4:U4');
-        $this->excel->getActiveSheet()->setCellValue('J4', 'MM/DD/YYYY');
+        $this->excel->getActiveSheet()->setCellValue('J4', 'DD/MM/YYYY');
         $this->excel->getActiveSheet()->getStyle("J4")->getFont()->setSize();
         $this->excel->getActiveSheet()->getStyle("J4")->getFont()->setItalic(true);
 
@@ -698,7 +698,7 @@ class Upload_form extends CI_controller
                 $field2 = user_role_name($user_details['id']);
             } else{
                 if ($market_co_ord[$i]['field2'] == "date") {
-                    $field2 = (!empty($submit_date)) ? str2USDate($submit_date):"";
+                    $field2 = (!empty($submit_date)) ? getCustomDate($submit_date,'d/m/Y'):"";
                     $this->excel->getActiveSheet()->getStyle("L$i")->getNumberFormat()->
                         setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX14);
                 } else {
@@ -712,7 +712,7 @@ class Upload_form extends CI_controller
         //16th row
         $this->excel->getActiveSheet()->getRowDimension($i)->setRowHeight(19.5);
         $this->excel->getActiveSheet()->mergeCells("N$i:Q$i");
-        $this->excel->getActiveSheet()->setCellValue("N$i", "MM/DD/YYYY");
+        $this->excel->getActiveSheet()->setCellValue("N$i", "DD/MM/YYYY");
         $this->excel->getActiveSheet()->getStyle("N$i")->getFont()->setSize();
         $this->excel->getActiveSheet()->getStyle("N$i")->getFont()->setItalic(true);
 

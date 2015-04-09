@@ -29,7 +29,7 @@
             <div class="control-group">
                 <label class="control-label">No.of Units:</label>
                 <div class=" btn-group input-prepend">                   
-                    <input type="text" value="<?php echo set_value('no_units',$form_data['no_units']); ?>"  class="span3"  name="no_units" />           
+                    <input type="text" value="<?php echo set_value('no_units',$form_data['no_units']); ?>"  class="span3" onkeypress='return numbersonly(event)'  name="no_units" />           
                 </div>
                 <?php echo form_error('no_units', '<div style="color:red;margin-left: 75px;">', '</div>'); ?>
             </div>
@@ -41,3 +41,21 @@
       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
       <button class="btn btn-primary" onclick="add_plant('process','<?php echo $edit_id;?>')" id="InfroTextSubmit">Submit</button>
 </div>
+
+<script>
+
+function numbersonly(e) {
+  var unicode=e.charCode? e.charCode : e.keyCode
+  //alert(unicode)
+  if (unicode!=8 && unicode != 46){ //if the key isn't the backspace key (which we should allow)
+  if (unicode<48||unicode>57) //if not a number
+    {
+      if(unicode==8 || unicode==46 || unicode == 37 || unicode == 39)//To  enable tab index in firefox and mac.(TAB, Backspace and DEL from the keyboard)
+      return true
+        else
+      return false //disable key press
+    }
+  }
+}
+
+</script>

@@ -7,7 +7,7 @@
 </div>
 
 <div class="row-fluid">
-  <h1>DAILY DEMAND SHEET FOR DISPATCH DAY <?php echo date('m/d/Y',$date);?></h1>
+  <h1>DAILY DEMAND SHEET FOR DISPATCH DAY <?php echo date('d/m/Y',$date);?></h1>
 </div>
 
 
@@ -64,7 +64,7 @@
     <td> Unique ID</td>
     <td><?=$user_details['id']?></td>
     <td>Date of Submission:</td>
-    <td><?=(!empty($submit_date))?str2USDate($submit_date):""?></td>
+    <td><?=(!empty($submit_date))?getCustomDate($submit_date,'d/m/Y'):""?></td>
   </tr>
 </table>
 

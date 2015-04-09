@@ -94,7 +94,7 @@
 							<input name="source_power[]" id="source_power" value="<?php echo $demands['source'];?>" style="width:150px" type="text">
 						</div>
 						<div class="controls" style="float:right;">
-							<input name="amount_power[]" id="amount_power" value="<?php echo $demands['power'];?>" style="width:150px" type="text">
+							<input name="amount_power[]" id="amount_power" value="<?php echo $demands['power'];?>" onkeypress='return numbersonly(event)' style="width:150px" type="text">
 						</div>
 					</div>
 
@@ -107,7 +107,7 @@
 					<input name="source_power[]" id="source_power" style="width:150px" type="text">
 				</div>
 				<div class="controls" style="float:right;">
-					<input name="amount_power[]" id="amount_power" style="width:150px" type="text">
+					<input name="amount_power[]" id="amount_power" onkeypress='return numbersonly(event)' style="width:150px" type="text">
 				</div>
 			</div>
 
@@ -146,7 +146,7 @@
 		$('#add_demand').click(function() {	
 
 			if(n<=20){
-				var htmlval2 = '<div class="control-group" id="TextBoxDiv"><div class="controls" style="float:left;"><input name="source_power[]" id="source_power" style="width:150px" type="text"></div><div class="controls" style="float:right;"><input name="amount_power[]" id="amount_power" style="width:150px" type="text"></div></div>';					
+				var htmlval2 = '<div class="control-group" id="TextBoxDiv"><div class="controls" style="float:left;"><input name="source_power[]" id="source_power" style="width:150px" type="text"></div><div class="controls" style="float:right;"><input name="amount_power[]" id="amount_power" onkeypress="return numbersonly(event)" style="width:150px" type="text"></div></div>';					
 			
 				$(htmlval2).fadeIn('slow').appendTo('#Demandsgroup');				
 			n++;
@@ -173,6 +173,20 @@ function no_address_alert(){
         title: 'Information',
         message: 'Sorry, Please add your address and proceed to create Demands!'
     });
+}
+
+function numbersonly(e) {
+  var unicode=e.charCode? e.charCode : e.keyCode
+  //alert(unicode)
+  if (unicode!=8 && unicode != 46){ //if the key isn't the backspace key (which we should allow)
+  if (unicode<48||unicode>57) //if not a number
+    {
+      if(unicode==8 || unicode==46 || unicode == 37 || unicode == 39)//To  enable tab index in firefox and mac.(TAB, Backspace and DEL from the keyboard)
+      return true
+        else
+      return false //disable key press
+    }
+  }
 }
 
 </script>

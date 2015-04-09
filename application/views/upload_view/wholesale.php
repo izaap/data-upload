@@ -6,7 +6,7 @@
 
 <div class="row-fluid">
   
-    <h1>DAILY AVAILABILITY DECLARATION FOR DISPATCH DAY <?php echo date('m/d/Y',$date);?></h1>
+    <h1>DAILY AVAILABILITY DECLARATION FOR DISPATCH DAY <?php echo date('d/m/Y',$date);?></h1>
   
 </div>
 
@@ -59,7 +59,7 @@
     <td>Special Unique ID</td>
     <td><?=$user_details['id']?></td>
     <td>Date of Submission:</td>
-    <td><?=str2USDate($submit_date)?></td>
+    <td><?=(!empty($submit_date))?getCustomDate($submit_date,'d/m/Y'):""?></td>
   </tr>
 </table>
 
